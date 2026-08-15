@@ -738,6 +738,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin: {
+        Args: { _user_id?: string }
+        Returns: boolean
+      }
+      admin_exists: { Args: never; Returns: boolean }
+      bootstrap_first_admin: {
+        Args: { p_display_name?: string }
+        Returns: Json
+      }
       place_table_order: {
         Args: { p_items: Json; p_table_id: string }
         Returns: Json
@@ -771,7 +780,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "venue_owner" | "dj" | "bartender" | "guest"
+      app_role: "admin" | "venue_owner" | "dj" | "bartender" | "guest"
       event_status: "draft" | "scheduled" | "live" | "ended" | "archived"
       point_transaction_type: "purchase" | "earned" | "spent" | "refund"
       request_status: "pending" | "accepted" | "declined" | "playing" | "played"
@@ -903,7 +912,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["venue_owner", "dj", "bartender", "guest"],
+      app_role: ["admin", "venue_owner", "dj", "bartender", "guest"],
       event_status: ["draft", "scheduled", "live", "ended", "archived"],
       point_transaction_type: ["purchase", "earned", "spent", "refund"],
       request_status: ["pending", "accepted", "declined", "playing", "played"],

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Home, Radio, User, LayoutDashboard, Settings, Music, Store, Wine } from 'lucide-react';
+import { Home, Radio, User, LayoutDashboard, Settings, Music, Store, Wine, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface NavItem {
@@ -24,6 +24,12 @@ function getNavItems(role: string | null, isAuthenticated: boolean): NavItem[] {
   ];
 
   switch (role) {
+    case 'admin':
+      return [
+        ...common,
+        { icon: Shield, label: 'Admin', path: '/admin' },
+        { icon: Settings, label: 'Settings', path: '/settings' },
+      ];
     case 'dj':
       return [
         ...common,

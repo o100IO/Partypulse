@@ -2,7 +2,7 @@ import { useState, useEffect, createContext, useContext, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
-type AppRole = 'venue_owner' | 'dj' | 'bartender' | 'guest';
+type AppRole = 'admin' | 'venue_owner' | 'dj' | 'bartender' | 'guest';
 
 interface Profile {
   id: string;
@@ -44,16 +44,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProfile(profileData);
     }
 
-    const { data: roleData } = await supabase
+    const { data: rolesData } = await supabase
       .from('user_roles')
       .select('role')
-      .eq('user_id', userId)
-      .limit(1)
-      .single();
+      .eq('user_id', userId);
 
-    if (roleData) {
-      setRole(roleData.role as AppRole);
-    }
+    const roles = (rolesData || []).map((r) => r.role as AppRole);
+    const priority: AppRole[] = ['admin', 'venue_owner', 'dj', 'bartender', 'guest'];
+    const picked = priority.find((p) => roles.includes(p)) || roles[0] || null;
+    setRole(picked);
   };
 
   useEffect(() => {
@@ -110,12 +109,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: error as Error };
     }
 
+    // Email confirmation enabled: user exists but no session until they click the mail link
+    if (data.user && !data.session) {
+      return {
+        error: Object.assign(
+          new Error(
+            'Check your email to confirm your account, then sign in. (Sandbox tip: disable “Confirm email” in Supabase Auth → Providers → Email.)'
+          ),
+          { name: 'EmailConfirmationRequired' }
+        ),
+      };
+    }
+
     if (data.user) {
+      // Ensure profile exists (trigger may already create it)
+      await supabase.from('profiles').upsert(
+        {
+          user_id: data.user.id,
+          email,
+          display_name: displayName || email.split('@')[0],
+        },
+        { onConflict: 'user_id' }
+      );
+
       const { error: roleError } = await supabase
         .from('user_roles')
         .insert({ user_id: data.user.id, role });
 
-      if (roleError) {
+      if (roleError && !/duplicate|unique/i.test(roleError.message)) {
+        // Common when migrations aren't applied yet
+        if (/schema cache|does not exist|PGRST|Could not find the table/i.test(roleError.message)) {
+          return {
+            error: new Error(
+              'Database tables are missing. Run supabase/bootstrap_aravfges.sql in the Supabase SQL Editor, then try again.'
+            ),
+          };
+        }
         return { error: roleError as Error };
       }
     }

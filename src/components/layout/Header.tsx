@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, LogOut, Settings, LayoutDashboard, Coins, Radio, Music, Store, Wine, Plus } from 'lucide-react';
+import { User, LogOut, Settings, LayoutDashboard, Coins, Radio, Music, Store, Wine, Plus, Shield } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
 
@@ -28,6 +28,11 @@ function DesktopNavLinks({ role, pathname }: { role: string | null; pathname: st
       <Link to="/events" className={linkClass('/events')}>
         <span className="flex items-center gap-1.5"><Radio className="h-3.5 w-3.5" />Events</span>
       </Link>
+      {role === 'admin' && (
+        <Link to="/admin" className={linkClass('/admin')}>
+          <span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" />Admin</span>
+        </Link>
+      )}
       {role === 'dj' && (
         <>
           <Link to="/dj/dashboard" className={linkClass('/dj/dashboard')}>
@@ -117,6 +122,12 @@ export function Header() {
                   )}
                 </div>
                 <DropdownMenuSeparator />
+                {role === 'admin' && (
+                  <DropdownMenuItem onClick={() => navigate('/admin')}>
+                    <Shield className="mr-2 h-4 w-4" />
+                    Admin dashboard
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={() => navigate('/settings')}>
                   <Settings className="mr-2 h-4 w-4" />
                   Settings

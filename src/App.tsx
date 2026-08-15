@@ -38,6 +38,8 @@ import BartenderDashboard from "./pages/bartender/Dashboard";
 import GuestEvent from "./pages/guest/Event";
 import GuestProfile from "./pages/guest/Profile";
 import Events from "./pages/Events";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminSetup from "./pages/admin/AdminSetup";
 
 const queryClient = new QueryClient();
 
@@ -186,6 +188,17 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['guest']}>
                     <GuestProfile />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Platform admin */}
+              <Route path="/admin/setup" element={<AdminSetup />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminDashboard />
                   </ProtectedRoute>
                 }
               />

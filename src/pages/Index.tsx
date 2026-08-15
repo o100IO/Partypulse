@@ -23,6 +23,8 @@ export default function Index() {
 
   const getDashboardLink = () => {
     switch (role) {
+      case 'admin':
+        return '/admin';
       case 'venue_owner':
         return '/venue/dashboard';
       case 'dj':

@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  allowedRoles?: ('venue_owner' | 'dj' | 'bartender' | 'guest')[];
+  allowedRoles?: ('admin' | 'venue_owner' | 'dj' | 'bartender' | 'guest')[];
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
@@ -24,7 +24,12 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  if (allowedRoles && role && !allowedRoles.includes(role)) {
+  // Platform admins can access any role-gated route
+  if (allowedRoles && role && role !== 'admin' && !allowedRoles.includes(role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (allowedRoles && !role) {
     return <Navigate to="/" replace />;
   }
 
