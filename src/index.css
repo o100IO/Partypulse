@@ -1,0 +1,364 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* EventPulse Design System - Modern & Fun */
+
+@layer base {
+  :root {
+    --background: 220 14% 96%;
+    --foreground: 240 10% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 92%;
+    --secondary-foreground: 240 10% 10%;
+
+    --muted: 220 14% 92%;
+    --muted-foreground: 240 4% 46%;
+
+    --accent: 262 83% 96%;
+    --accent-foreground: 262 83% 45%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    /* Rank colors */
+    --rank-gold: 43 96% 56%;
+    --rank-silver: 210 8% 65%;
+    --rank-bronze: 25 57% 50%;
+
+    /* Custom EventPulse tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(280, 87%, 65%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(262, 83%, 96%) 0%, hsl(280, 87%, 96%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(38, 92%, 50%) 0%, hsl(0, 84%, 60%) 100%);
+    --shadow-sm: 0 1px 3px 0 hsl(220 14% 10% / 0.06), 0 1px 2px -1px hsl(220 14% 10% / 0.06);
+    --shadow-md: 0 4px 6px -1px hsl(220 14% 10% / 0.08), 0 2px 4px -2px hsl(220 14% 10% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(220 14% 10% / 0.08), 0 4px 6px -4px hsl(220 14% 10% / 0.04);
+    --shadow-glow: 0 0 20px hsl(262, 83%, 58%, 0.25);
+
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 240 5% 26%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 83% 96%;
+    --sidebar-accent-foreground: 262 83% 45%;
+    --sidebar-border: 220 13% 88%;
+    --sidebar-ring: 262 83% 58%;
+  }
+
+  .dark {
+    --background: 230 20% 10%;
+    --foreground: 0 0% 98%;
+
+    --card: 230 18% 14%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 230 18% 14%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 262 83% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 230 15% 20%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 230 15% 20%;
+    --muted-foreground: 230 10% 65%;
+
+    --accent: 262 50% 20%;
+    --accent-foreground: 262 83% 75%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 230 15% 22%;
+    --input: 230 15% 22%;
+    --ring: 262 83% 65%;
+
+    --rank-gold: 43 96% 56%;
+    --rank-silver: 210 8% 70%;
+    --rank-bronze: 25 57% 55%;
+
+    --sidebar-background: 230 20% 10%;
+    --sidebar-foreground: 230 10% 85%;
+    --sidebar-primary: 262 83% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 50% 20%;
+    --sidebar-accent-foreground: 262 83% 75%;
+    --sidebar-border: 230 15% 22%;
+    --sidebar-ring: 262 83% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .gradient-warm {
+    background: var(--gradient-warm);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glass {
+    @apply bg-background/80 backdrop-blur-lg border border-border/50;
+  }
+
+  .glass-card {
+    @apply bg-card/70 backdrop-blur-xl border border-border/40 shadow-md;
+  }
+
+  .tab-pill {
+    @apply rounded-full px-4 py-2 text-sm font-medium transition-all;
+  }
+
+  /* ── Party Animations ── */
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .animate-vote-pop {
+    animation: vote-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background-size: 200% 100%;
+  }
+
+  .animate-float-up {
+    animation: float-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-breathing-glow {
+    animation: breathing-glow 2s ease-in-out infinite;
+  }
+
+  .animate-press {
+    animation: press 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .animate-stamp {
+    animation: stamp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .animate-emoji-rain {
+    animation: emoji-rain 1.8s ease-in forwards;
+  }
+
+  /* Shimmer sweep on tip button */
+  .glow-btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-btn-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      hsl(0 0% 100% / 0.2) 45%,
+      hsl(0 0% 100% / 0.35) 50%,
+      hsl(0 0% 100% / 0.2) 55%,
+      transparent 70%
+    );
+    animation: glow-sweep 2.5s ease-in-out infinite;
+  }
+
+  @keyframes glow-sweep {
+    0% { transform: translateX(-120%); }
+    60%, 100% { transform: translateX(120%); }
+  }
+
+  .animate-confetti {
+    animation: confetti-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-number-flip {
+    animation: number-flip 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .animate-medal-shimmer {
+    animation: medal-shimmer 2s ease-in-out infinite;
+  }
+
+  .animate-tab-fade {
+    animation: tab-fade 0.25s ease-out;
+  }
+
+  /* Equalizer bars */
+  .eq-bar {
+    @apply inline-block w-[3px] rounded-full bg-destructive;
+    animation: eq-bounce var(--eq-speed, 0.6s) ease-in-out infinite alternate;
+  }
+
+  /* Glow ring for live DJ avatar */
+  .glow-ring {
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.3), 0 0 12px hsl(var(--primary) / 0.2);
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  /* Status morph */
+  .status-morph {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  }
+
+  /* Gold shimmer border for tickets */
+  .border-gold-shimmer {
+    border-image: linear-gradient(135deg, hsl(var(--rank-gold)), hsl(var(--rank-gold) / 0.4), hsl(var(--rank-gold))) 1;
+    animation: shimmer 2s linear infinite;
+    background-size: 200% 100%;
+  }
+
+  /* ── Keyframes ── */
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes vote-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes float-up {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-28px) scale(1.2); }
+  }
+
+  @keyframes breathing-glow {
+    0%, 100% { box-shadow: 0 0 8px hsl(var(--primary) / 0.15); }
+    50% { box-shadow: 0 0 20px hsl(var(--primary) / 0.35), 0 0 40px hsl(var(--primary) / 0.1); }
+  }
+
+  @keyframes eq-bounce {
+    0% { height: 4px; }
+    100% { height: var(--eq-height, 16px); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 0 3px hsl(var(--primary) / 0.3), 0 0 12px hsl(var(--primary) / 0.2); }
+    50% { box-shadow: 0 0 0 5px hsl(var(--primary) / 0.15), 0 0 24px hsl(var(--primary) / 0.35); }
+  }
+
+  @keyframes press {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.92); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes stamp {
+    0% { transform: scale(0.5) rotate(-15deg); opacity: 0; }
+    60% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  @keyframes emoji-rain {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(120px) rotate(45deg); opacity: 0; }
+  }
+
+  @keyframes confetti-pop {
+    0% { transform: scale(0) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.4) rotate(180deg); opacity: 0.8; }
+    100% { transform: scale(0) rotate(360deg); opacity: 0; }
+  }
+
+  @keyframes number-flip {
+    0% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-6px) scale(1.15); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  @keyframes medal-shimmer {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+  }
+
+  @keyframes tab-fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Dark mode particle background */
+  .dark .particle-bg {
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, hsl(var(--primary) / 0.15) 50%, transparent 50%),
+      radial-gradient(1px 1px at 80% 40%, hsl(var(--primary) / 0.1) 50%, transparent 50%),
+      radial-gradient(1px 1px at 40% 70%, hsl(var(--primary) / 0.12) 50%, transparent 50%),
+      radial-gradient(1px 1px at 70% 85%, hsl(var(--primary) / 0.08) 50%, transparent 50%),
+      radial-gradient(1px 1px at 25% 55%, hsl(var(--primary) / 0.1) 50%, transparent 50%),
+      radial-gradient(1.5px 1.5px at 90% 15%, hsl(var(--primary) / 0.12) 50%, transparent 50%),
+      radial-gradient(1px 1px at 55% 30%, hsl(var(--primary) / 0.08) 50%, transparent 50%);
+  }
+}
