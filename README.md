@@ -60,6 +60,14 @@ Join policy (open vs restricted) is host-configurable per event.
 | `npm test` | Vitest |
 | `npm run lint` | ESLint |
 
-## Mobile (Capacitor)
+## Mobile sandbox (Capacitor)
 
-Android/iOS Capacitor packaging is part of the sandbox roadmap. Until then, use a phone browser against the LAN Vite URL or the deployed site.
+After `npm run build`:
+
+```sh
+npm run cap:sync
+npm run cap:android   # opens Android Studio (Windows/macOS)
+# iOS: open ios/App/App.xcworkspace on a Mac
+```
+
+Apply the latest SQL in `supabase/migrations/` (including join policy) to your Supabase project before testing restricted join.

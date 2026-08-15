@@ -64,7 +64,8 @@ export function TicketManager({ eventId }: TicketManagerProps) {
           event_id: eventId,
           name: newTicket.name,
           description: newTicket.description || null,
-          price_cents: Math.round(parseFloat(newTicket.price) * 100),
+          // price_cents stores points (legacy column name); do not multiply by 100
+          price_cents: Math.round(parseFloat(newTicket.price)) || 0,
           quantity_available: parseInt(newTicket.quantity) || 100,
           sort_order: tickets.length + 1,
           perk_drink_discount: parseInt(newTicket.drinkDiscount) || 0,

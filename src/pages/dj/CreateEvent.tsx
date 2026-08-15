@@ -19,10 +19,11 @@ import {
 } from '@/components/ui/select';
 
 export default function CreateEvent() {
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [venues, setVenues] = useState<{ id: string; name: string }[]>([]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -32,7 +33,21 @@ export default function CreateEvent() {
     startTime: '',
     endDate: '',
     endTime: '',
+    venueId: '',
   });
+
+  useEffect(() => {
+    if (!user?.id) return;
+    const loadVenues = async () => {
+      const { data } = await supabase
+        .from('venues')
+        .select('id, name')
+        .eq('owner_id', user.id)
+        .order('name');
+      setVenues(data || []);
+    };
+    void loadVenues();
+  }, [user?.id]);
 
   const genres = [
     'Hip Hop',
@@ -79,6 +94,7 @@ export default function CreateEvent() {
           end_time: endTime,
           status: 'scheduled',
           qr_code: crypto.randomUUID(),
+          venue_id: formData.venueId || null,
         })
         .select()
         .single();
@@ -156,6 +172,30 @@ export default function CreateEvent() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {venues.length > 0 && (
+                <div className="space-y-2">
+                  <Label>Venue {role === 'venue_owner' ? '' : '(optional)'}</Label>
+                  <Select
+                    value={formData.venueId || 'none'}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, venueId: value === 'none' ? '' : value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a venue" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">No venue</SelectItem>
+                      {venues.map((venue) => (
+                        <SelectItem key={venue.id} value={venue.id}>
+                          {venue.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">

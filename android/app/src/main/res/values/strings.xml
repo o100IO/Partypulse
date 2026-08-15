@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Partypulse</string>
+    <string name="title_activity_main">Partypulse</string>
+    <string name="package_name">com.o100io.partypulse</string>
+    <string name="custom_url_scheme">com.o100io.partypulse</string>
+</resources>

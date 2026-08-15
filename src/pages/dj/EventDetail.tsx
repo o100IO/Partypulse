@@ -17,6 +17,7 @@ import { VenueMenuManager } from '@/components/VenueMenuManager';
 import { DJOrderDashboard } from '@/components/DJOrderDashboard';
 import { AnnouncementPanel } from '@/components/AnnouncementPanel';
 import { EventChat } from '@/components/EventChat';
+import { JoinSettingsCard, JoinPolicy } from '@/components/JoinSettingsCard';
 import { cn } from '@/lib/utils';
 import {
   Music, Calendar, Clock, QrCode, Play, Pause, ArrowLeft, ExternalLink,
@@ -40,6 +41,8 @@ interface Event {
   theme_color: string | null;
   theme_bg_image: string | null;
   theme_logo_url: string | null;
+  join_policy?: string | null;
+  join_code?: string | null;
 }
 
 interface SongRequest {
@@ -448,7 +451,17 @@ export default function EventDetail() {
 
               {/* Branding Tab */}
               <TabsContent value="brand">
-                <BrandingPanel eventId={eventId!} event={event} onUpdate={fetchEventData} />
+                <div className="space-y-4">
+                  <JoinSettingsCard
+                    eventId={eventId!}
+                    joinPolicy={(event.join_policy as JoinPolicy) || 'open'}
+                    joinCode={event.join_code || null}
+                    onSaved={(policy, code) =>
+                      setEvent((prev) => (prev ? { ...prev, join_policy: policy, join_code: code } : null))
+                    }
+                  />
+                  <BrandingPanel eventId={eventId!} event={event} onUpdate={fetchEventData} />
+                </div>
               </TabsContent>
             </Tabs>
           </div>

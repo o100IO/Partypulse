@@ -176,6 +176,8 @@ export type Database = {
           theme_logo_url: string | null
           updated_at: string
           venue_id: string | null
+          join_policy: string
+          join_code: string | null
         }
         Insert: {
           created_at?: string
@@ -194,6 +196,8 @@ export type Database = {
           theme_logo_url?: string | null
           updated_at?: string
           venue_id?: string | null
+          join_policy?: string
+          join_code?: string | null
         }
         Update: {
           created_at?: string
@@ -212,6 +216,8 @@ export type Database = {
           theme_logo_url?: string | null
           updated_at?: string
           venue_id?: string | null
+          join_policy?: string
+          join_code?: string | null
         }
         Relationships: [
           {

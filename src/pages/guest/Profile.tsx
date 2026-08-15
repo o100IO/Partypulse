@@ -197,27 +197,35 @@ export default function GuestProfile() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="p-4 rounded-lg border hover:border-primary transition-colors cursor-pointer">
-                <div className="text-2xl font-bold mb-1">500</div>
-                <div className="text-sm text-muted-foreground mb-2">points</div>
-                <Badge variant="outline">$5.00</Badge>
-              </div>
-              <div className="p-4 rounded-lg border border-primary bg-primary/5 cursor-pointer relative">
-                <Badge className="absolute -top-2 -right-2 text-xs">Popular</Badge>
-                <div className="text-2xl font-bold mb-1">1,100</div>
-                <div className="text-sm text-muted-foreground mb-2">points</div>
-                <Badge variant="outline">$10.00</Badge>
-              </div>
-              <div className="p-4 rounded-lg border hover:border-primary transition-colors cursor-pointer">
-                <div className="text-2xl font-bold mb-1">3,000</div>
-                <div className="text-sm text-muted-foreground mb-2">points</div>
-                <Badge variant="outline">$25.00</Badge>
-              </div>
+              {[
+                { points: 500, label: '$5.00' },
+                { points: 1100, label: '$10.00', popular: true },
+                { points: 3000, label: '$25.00' },
+              ].map((pkg) => (
+                <button
+                  key={pkg.points}
+                  type="button"
+                  disabled={addingPoints}
+                  onClick={addTestPoints}
+                  className={`p-4 rounded-lg border text-left transition-colors ${
+                    pkg.popular
+                      ? 'border-primary bg-primary/5 relative'
+                      : 'hover:border-primary'
+                  } disabled:opacity-60`}
+                >
+                  {pkg.popular && (
+                    <Badge className="absolute -top-2 -right-2 text-xs">Popular</Badge>
+                  )}
+                  <div className="text-2xl font-bold mb-1">{pkg.points.toLocaleString()}</div>
+                  <div className="text-sm text-muted-foreground mb-2">points (demo)</div>
+                  <Badge variant="outline">{pkg.label} — demo grant</Badge>
+                </button>
+              ))}
             </div>
             <div className="mt-4 p-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
               <p className="text-sm font-medium text-primary flex items-center justify-center gap-1.5">
                 <TestTube className="h-3.5 w-3.5" />
-                Demo Mode — tap packages above or use the test button to add free points
+                Demo mode — packages call the same free grant as the test button (Stripe later)
               </p>
             </div>
           </CardContent>

@@ -119,7 +119,7 @@ export function GuestTable({ eventId, venueId, userBalance, onBalanceUpdate, act
         .select('id, table_name')
         .eq('event_id', eventId)
         .eq('user_id', user!.id)
-        .eq('status', 'active')
+        .eq('status', 'open')
         .maybeSingle();
 
       if (tableData) {
@@ -148,7 +148,7 @@ export function GuestTable({ eventId, venueId, userBalance, onBalanceUpdate, act
     try {
       const { data, error } = await supabase
         .from('guest_tables')
-        .insert({ event_id: eventId, user_id: user.id, table_name: name.trim() })
+        .insert({ event_id: eventId, user_id: user.id, table_name: name.trim(), status: 'open' })
         .select('id, table_name')
         .single();
       if (error) throw error;

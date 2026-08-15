@@ -29,6 +29,7 @@ import VenueDetail from "./pages/venue/VenueDetail";
 import VenueStaff from "./pages/venue/VenueStaff";
 import VenueEvents from "./pages/venue/VenueEvents";
 import VenueQR from "./pages/venue/VenueQR";
+import VenueLive from "./pages/venue/VenueLive";
 
 // Bartender Pages
 import BartenderDashboard from "./pages/bartender/Dashboard";
@@ -57,6 +58,7 @@ const App = () => (
               {/* Public Routes */}
               <Route path="/events" element={<Events />} />
               <Route path="/e/:eventId" element={<GuestEvent />} />
+              <Route path="/venue/:venueId/live" element={<VenueLive />} />
 
               {/* Settings (All authenticated users) */}
               <Route

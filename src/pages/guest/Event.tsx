@@ -35,6 +35,8 @@ interface Event {
   theme_color: string | null;
   theme_bg_image: string | null;
   theme_logo_url: string | null;
+  join_policy?: string | null;
+  join_code?: string | null;
 }
 
 interface SongRequest {
@@ -296,6 +298,10 @@ export default function GuestEvent() {
   const [ticketPerks, setTicketPerks] = useState<TicketPerks>({ drink_discount: 0, priority_queue: false, bonus_votes: 0 });
   const [venueOwnerId, setVenueOwnerId] = useState<string | undefined>(undefined);
   const [chatUnread, setChatUnread] = useState(0);
+  const [hasTicket, setHasTicket] = useState(false);
+  const [codeUnlocked, setCodeUnlocked] = useState(false);
+  const [codeInput, setCodeInput] = useState('');
+  const [checkingAccess, setCheckingAccess] = useState(false);
 
   const nowPlaying = requests.find((r) => r.status === 'playing');
   const showMiniBar = activeTab !== 'queue' && nowPlaying;
@@ -306,7 +312,7 @@ export default function GuestEvent() {
       const cleanup = subscribeToUpdates();
       return cleanup;
     }
-  }, [eventId]);
+  }, [eventId, user?.id]);
 
   useEffect(() => {
     if (profile) setUserBalance(profile.points_balance);
@@ -332,6 +338,25 @@ export default function GuestEvent() {
         .from('events').select('*').eq('id', eventId).single();
       if (eventError) throw eventError;
       setEvent(eventData as unknown as Event);
+
+      const policy = (eventData as { join_policy?: string }).join_policy || 'open';
+      if (eventId && policy === 'code') {
+        const unlocked = sessionStorage.getItem(`eventpulse_join_${eventId}`) === '1';
+        setCodeUnlocked(unlocked);
+      }
+
+      if (user?.id && eventId) {
+        const { data: purchase } = await supabase
+          .from('ticket_purchases')
+          .select('id')
+          .eq('event_id', eventId)
+          .eq('user_id', user.id)
+          .limit(1)
+          .maybeSingle();
+        setHasTicket(!!purchase);
+      } else {
+        setHasTicket(false);
+      }
 
       const { data: profileData } = await supabase
         .from('profiles').select('*').eq('user_id', eventData.dj_id).single();
@@ -464,6 +489,85 @@ export default function GuestEvent() {
         <div className="container py-8 text-center">
           <h1 className="text-2xl font-bold mb-4">Event Not Found</h1>
           <p className="text-muted-foreground">This event may not exist or has ended.</p>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  const joinPolicy = event.join_policy || 'open';
+  const needsSignIn = joinPolicy === 'signed_in' && !user;
+  const needsTicket = joinPolicy === 'ticket_required' && !hasTicket;
+  const needsCode = joinPolicy === 'code' && !codeUnlocked;
+
+  const tryUnlockCode = () => {
+    setCheckingAccess(true);
+    try {
+      const expected = (event.join_code || '').trim().toLowerCase();
+      if (!expected || codeInput.trim().toLowerCase() !== expected) {
+        toast({ variant: 'destructive', title: 'Invalid invite code' });
+        return;
+      }
+      sessionStorage.setItem(`eventpulse_join_${eventId}`, '1');
+      setCodeUnlocked(true);
+      toast({ title: 'Welcome in!' });
+    } finally {
+      setCheckingAccess(false);
+    }
+  };
+
+  if (needsSignIn || needsTicket || needsCode) {
+    return (
+      <MainLayout showFooter={false}>
+        <div className="container max-w-md py-12 space-y-4">
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl font-bold">{event.name}</h1>
+            <p className="text-muted-foreground">
+              {needsSignIn && 'This event requires a signed-in account to join.'}
+              {needsTicket && !needsSignIn && 'Buy a ticket to unlock the event hub.'}
+              {needsCode && 'Enter the invite code from the host to join.'}
+            </p>
+          </div>
+          {needsCode && (
+            <div className="flex gap-2">
+              <Input
+                placeholder="Invite code"
+                value={codeInput}
+                onChange={(e) => setCodeInput(e.target.value)}
+              />
+              <Button onClick={tryUnlockCode} disabled={checkingAccess}>
+                {checkingAccess ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Unlock'}
+              </Button>
+            </div>
+          )}
+          {(needsSignIn || (needsTicket && !user)) && (
+            <div className="text-center">
+              <Button asChild>
+                <Link to="/auth">Sign in</Link>
+              </Button>
+            </div>
+          )}
+          {needsTicket && user && (
+            <div className="space-y-3">
+              {tickets.length === 0 ? (
+                <p className="text-sm text-center text-muted-foreground">
+                  No tickets are on sale yet. Ask the host to add ticket types.
+                </p>
+              ) : (
+                tickets.map((ticket) => (
+                  <TicketCard
+                    key={ticket.id}
+                    ticket={ticket}
+                    userId={user.id}
+                    userBalance={userBalance}
+                    onPurchase={(newBalance) => {
+                      setUserBalance(newBalance);
+                      fetchEventData();
+                    }}
+                  />
+                ))
+              )}
+            </div>
+          )}
         </div>
       </MainLayout>
     );
