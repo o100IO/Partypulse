@@ -16,6 +16,8 @@ dist-ssr
 .env
 .env.*
 !.env.example
+.supabase-db-password.tmp
+.temp
 
 # Capacitor / native (build artifacts)
 android/.gradle
