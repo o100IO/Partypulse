@@ -31,14 +31,16 @@ Required:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 
-Current linked cloud project (fjallapp org): **Partypulse** — `aqcbbadvmsinlzcxitbg` (`https://aqcbbadvmsinlzcxitbg.supabase.co`).
+Current GitHub-linked cloud project: **`aravfgeswpnnceujngmb`** (`https://aravfgeswpnnceujngmb.supabase.co`).
 
 3. Apply SQL migrations in `supabase/migrations/` to your Supabase project (CLI or dashboard) if the remote DB is behind:
 
 ```sh
-npx supabase link --project-ref YOUR_REF
+npx supabase link --project-ref aravfgeswpnnceujngmb
 npx supabase db push
 ```
+
+Or paste/run the SQL files in the Supabase SQL editor.
 
 4. Run the web app (desktop host + guest):
 
